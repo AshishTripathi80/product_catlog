@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
-import {ProductService} from "../services/product.service";
 import {Product} from "../data-type";
+import {ProductService} from "../services/product.service";
 import {NgForOf} from "@angular/common";
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-user-home',
   standalone: true,
   imports: [
     NgForOf
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './user-home.component.html',
+  styleUrl: './user-home.component.css'
 })
-export class HomeComponent {
-
-
+export class UserHomeComponent {
   productList:undefined | Product[];
   constructor(private product:ProductService) { }
 
