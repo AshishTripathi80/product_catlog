@@ -1,23 +1,37 @@
 <div class="product-list">
-  <h1>All Product List</h1>
+  <h1>Product List</h1>
+  <div class="nav-search">
+    <select #searchCriteria>
+      <option value="name">Name</option>
+      <option value="code">Code</option>
+      <option value="brand">Brand</option>
+      <option *ngIf="isLoggedIn" value="price">Price</option>
+    </select>
+    <input type="text" placeholder="Search for Products" #searchInput>
+    <button (click)="searchProducts(searchCriteria.value, searchInput.value)">Search</button>
+  </div>
   <table>
     <thead>
-      <tr>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Category</th>
-        <th>Brand</th>
-      </tr>
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th *ngIf="isLoggedIn">Price</th>
+      <th>Description</th>
+      <th>Category</th>
+      <th>Brand</th>
+      <th *ngIf="isLoggedIn">Action</th> <!-- New column for action -->
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of productList">
-        <td><img src="{{item.image}}"></td>
-        <td>{{item.name}}</td>
-        <td>{{item.description}}</td>
-        <td>{{item.category}}</td>
-        <td>{{item.brand}}</td>
-      </tr>
+    <tr *ngFor="let item of productList">
+      <td><img src="{{item.image}}"></td>
+      <td>{{item.name}}</td>
+      <td *ngIf="isLoggedIn">{{item.price}}</td>
+      <td>{{item.description}}</td>
+      <td>{{item.category}}</td>
+      <td>{{item.brand}}</td>
+      <td *ngIf="isLoggedIn"><button (click)="showProductDetails(item.id)">Product Details</button></td> <!-- Button for product details -->
+    </tr>
     </tbody>
   </table>
 </div>

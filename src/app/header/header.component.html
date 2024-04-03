@@ -1,12 +1,10 @@
 <nav class="nav">
-  <h1 ><a routerLink=""> Product Catalog</a></h1>
-  <div class="nav-search">
-    <input type="text" placeholder="Search for Products"/>
-    <button>Search</button>
-  </div>
+  <h1><a routerLink="">Product Catalog</a></h1>
+
   <ul>
-    <li><a routerLink="login">Login</a> </li>
-    <li><a routerLink="registration">Register</a> </li>
+    <li *ngIf="!isLoggedIn"><a routerLink="login">Login</a></li>
+    <li *ngIf="!isLoggedIn"><a routerLink="registration">Register</a></li>
+    <li *ngIf="isLoggedIn"><a (click)="logout()">Logout</a></li>
   </ul>
 </nav>
 <router-outlet></router-outlet>

@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 export class AuthService {
 
   isLoginError=new EventEmitter<boolean>(false);
+  loggedIn = new EventEmitter<boolean>(false);
 
   constructor(private http:HttpClient,private router:Router) { }
 
@@ -17,8 +18,22 @@ export class AuthService {
   userSignUp(data:SignUp){
     return this.http.post('http://localhost:8081/auth',data,{observe:'response'})
       .subscribe((result)=>{
-        this.router.navigate(['user-home'])
-      })
+          if (result && result.body) {
+            //this.isLoginError.emit(false);
+            localStorage.setItem('user', JSON.stringify(result.body));
+            this.loggedIn.emit(true);
+            this.router.navigate(['']);
+          }
+        },
+        (error) => {
+          console.error("Registration  Failed:", error);
+          this.isLoginError.emit(true);
+          // Optionally, you can extract the error message from the error object and display it on the UI.
+          const errorMessage = error.error.message; // Assuming the error response contains a message field.
+          console.error(errorMessage); // Log the error message to the console.
+          // Handle displaying the error message on the UI as per your UI design.
+        }
+      );
   }
 
   userLogin(data: SignUp) {
@@ -26,9 +41,10 @@ export class AuthService {
       .subscribe(
         (result) => {
           if (result && result.body) {
-            this.isLoginError.emit(false);
+            //this.isLoginError.emit(false);
             localStorage.setItem('user', JSON.stringify(result.body));
-            this.router.navigate(['user-home']);
+            this.loggedIn.emit(true);
+            this.router.navigate(['']);
           }
         },
         (error) => {
@@ -40,6 +56,15 @@ export class AuthService {
           // Handle displaying the error message on the UI as per your UI design.
         }
       );
+  }
+
+  userLogout() {
+    localStorage.removeItem('user');
+    this.router.navigate(['login']);
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('user');
   }
 
 }

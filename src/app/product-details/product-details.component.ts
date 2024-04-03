@@ -15,18 +15,40 @@ import {NgIf} from "@angular/common";
 })
 export class ProductDetailsComponent implements OnInit{
   productData:undefined | Product;
+  serviceabilityMessage: string | undefined;
 
-
-
-  constructor(private activeRoute:ActivatedRoute, private product:ProductService) { }
+  constructor(private route: ActivatedRoute, private productService: ProductService) { }
 
   ngOnInit(): void {
-    //let productId= this.activeRoute.snapshot.paramMap.get('productId');
-    let productId="4";
-    console.warn(productId);
-    productId && this.product.getProduct(productId).subscribe((result)=>{
-      this.productData= result;
-    })
+    this.route.paramMap.subscribe(params => {
+      // Extract productId from route parameters
+      const productId = Number(params.get('id'));
+      console.log('Product ID:', productId);
 
+      // Retrieve product details based on productId
+      this.productService.getProduct(productId).subscribe((result: Product | undefined) => {
+        this.productData = result;
+        console.log('Product Data:', this.productData);
+      });
+    });
+  }
+
+  checkServiceability(pincode: string) {
+    const productId = Number(this.productData?.id);
+    if (!productId || !pincode) {
+      console.error('Product ID or pincode is missing.');
+      return;
+    }
+
+    this.productService.checkServiceability(productId, pincode).subscribe(
+      (response) => {
+        console.warn(response)
+        this.serviceabilityMessage = `Serviceability: ${response.isServiceable ? 'Serviceable' : 'Not Serviceable'}. Delivery Time: ${response.deliveryTime}`;
+      },
+      (error) => {
+        console.error('Error checking serviceability:', error);
+        this.serviceabilityMessage = 'Error checking serviceability. Please try again later.';
+      }
+    );
   }
 }

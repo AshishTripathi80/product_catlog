@@ -7,6 +7,7 @@ export interface SignUp{
 }
 
 export interface Product{
+  id:Number,
   code:Number,
   name:String,
   image:String,

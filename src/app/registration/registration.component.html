@@ -1,13 +1,30 @@
 <div class="auth">
   <div class="signup">
     <h1>Registration</h1>
-    <form #SignUp="ngForm" (ngSubmit)="signUp(SignUp.value)" class="common-form">
-      <input class="form-input" type="email" ngModel name="email" placeholder="Email"/>
-      <input class="form-input" type="text" ngModel name="firstName" placeholder="First Name"/>
-      <input class="form-input" type="text" ngModel name="lastName" placeholder="Last Name"/>
-      <input class="form-input" type="password" ngModel name="password" placeholder="Password"/>
-      <input class="form-input" type="password" ngModel name="confirmPassword" placeholder="Confirm Password"/>
-      <button class="form-button">SignUp</button>
+    <form #SignUp="ngForm" (ngSubmit)="signUp(SignUp.value)" class="common-form" novalidate>
+      <input class="form-input" type="email" ngModel name="email" placeholder="Email" required email />
+      <div *ngIf="SignUp.controls['email'].invalid && (SignUp.controls['email'].dirty || SignUp.controls['email'].touched)">
+        <div *ngIf="SignUp.controls['email'].errors?.['required']">Email is required.</div>
+        <div *ngIf="SignUp.controls['email'].errors?.['email']">Invalid email format.</div>
+      </div>
+
+      <input class="form-input" type="text" ngModel name="firstName" placeholder="First Name" required minlength="2"/>
+      <div *ngIf="SignUp.controls['firstName'].invalid && (SignUp.controls['firstName'].dirty || SignUp.controls['firstName'].touched)">
+        <div *ngIf="SignUp.controls['firstName'].errors?.['required']">First Name is required.</div>
+        <div *ngIf="SignUp.controls['firstName'].errors?.['minlength']">First Name must be at least 2 characters long.</div>
+      </div>
+
+      <input class="form-input" type="text" ngModel name="lastName" placeholder="Last Name" required minlength="2"/>
+      <div *ngIf="SignUp.controls['lastName'].invalid && (SignUp.controls['lastName'].dirty || SignUp.controls['lastName'].touched)">
+        <div *ngIf="SignUp.controls['lastName'].errors?.['required']">Last Name is required.</div>
+        <div *ngIf="SignUp.controls['lastName'].errors?.['minlength']">Last Name must be at least 2 characters long.</div>
+      </div>
+
+      <input class="form-input" type="password" ngModel name="password" placeholder="Password" required minlength="5"/>
+      <input class="form-input" type="password" ngModel name="confirmPassword" placeholder="Confirm Password" required minlength="5" [compareTo]="'password'" />
+      <div *ngIf="SignUp.controls['confirmPassword'].errors?.['notSame']">Passwords do not match.</div>
+
+      <button class="form-button" [disabled]="SignUp.invalid">SignUp</button>
     </form>
   </div>
 </div>

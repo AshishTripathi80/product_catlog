@@ -3,12 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import {HeaderComponent} from "./header/header.component";
 import {LoginComponent} from "./login/login.component";
 import {RegistrationComponent} from "./registration/registration.component";
-import {HttpClient} from "@angular/common/http";
+import { SharedModule} from "./shared.module";
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, LoginComponent, RegistrationComponent],
+  imports: [RouterOutlet, HeaderComponent, LoginComponent,RegistrationComponent, SharedModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
